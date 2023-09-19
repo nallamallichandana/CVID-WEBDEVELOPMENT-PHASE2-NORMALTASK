@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Code Editor</title>
+    <!-- Include CodeMirror CSS and JS files -->
+    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+    <script src="codemirror/lib/codemirror.js"></script>
+    <!-- Include CodeMirror mode for JavaScript, HTML, and CSS -->
+    <script src="codemirror/mode/javascript/javascript.js"></script>
+    <script src="codemirror/mode/xml/xml.js"></script>
+    <script src="codemirror/mode/css/css.js"></script>
+</head>
+<body>
+    <!-- Create a text area for HTML, CSS, and JavaScript code -->
+    <textarea id="code" name="code">
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>My Web Page</title>
+            <style>
+                /* Add your CSS code here */
+            </style>
+        </head>
+        <body>
+            <h1>Hello, World!</h1>
+            <script>
+                // Add your JavaScript code here
+            </script>
+        </body>
+        </html>
+    </textarea>
+
+    <!-- Create a container for displaying the output -->
+    <div id="output"></div>
+
+    <!-- Include a button to execute the code -->
+    <button onclick="executeCode()">Run Code</button>
+
+    <script>
+        // Initialize CodeMirror with options
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: "htmlmixed", // Supports HTML, CSS, and JavaScript
+            lineNumbers: true,
+            theme: "default", // You can change the theme
+        });
+
+        // Function to execute the code
+        function executeCode() {
+            var code = editor.getValue();
+
+            // Clear the previous output
+            document.getElementById("output").innerHTML = "";
+
+            try {
+                // Create an iframe to isolate the code execution
+                var iframe = document.createElement("iframe");
+                document.body.appendChild(iframe);
+
+                // Write the code into the iframe
+                iframe.contentDocument.open();
+                iframe.contentDocument.write(code);
+                iframe.contentDocument.close();
+
+                // Remove the iframe after execution
+                document.body.removeChild(iframe);
+            } catch (error) {
+                // Handle and display errors
+                document.getElementById("output").innerHTML = "<b>Error:</b> " + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
